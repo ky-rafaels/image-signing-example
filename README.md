@@ -33,6 +33,5 @@ cosign attest --type spdxjson \
 ```bash
 helm repo add sigstore https://sigstore.github.io/helm-charts
 helm repo update
-kubectl create namespace cosign-system
-helm install policy-controller -n cosign-system sigstore/policy-controller --devel
+helm upgrade --install policy-controller -n cosign-system sigstore/policy-controller --create-namespace --set webhook.image.repository=cgr.dev/ky-rafaels.example.com/sigstore-policy-controller
 ```
