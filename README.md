@@ -27,3 +27,12 @@ cosign attest --type spdxjson \
  --predicate go-discovery.spdx.json \
  $DIGEST
 ```
+
+## Install sigstore policy controller
+
+```bash
+helm repo add sigstore https://sigstore.github.io/helm-charts
+helm repo update
+kubectl create namespace cosign-system
+helm install policy-controller -n cosign-system sigstore/policy-controller --devel
+```
