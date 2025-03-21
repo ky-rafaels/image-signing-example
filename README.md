@@ -64,3 +64,10 @@ helm upgrade --install policy-controller -n cosign-system sigstore/policy-contro
 --set webhook.registryCaBundle.key=bundle.pem
 ```
 
+## Deploy sample app
+
+Create namespace and label to enable validation of signed images
+
+```bash
+kubectl create ns go-discover && kubectl label ns go-discover policy.sigstore.dev/include="true"
+```
