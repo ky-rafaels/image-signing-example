@@ -1,5 +1,12 @@
 # image-signing-example
 
+## Dependencies
+- docker
+- kubectl
+- crane
+- syft
+- cosign
+
 ## Build an image
 
 For this example we are going to use a kubernetes discovery service as our sample app. This particular app intends to collect the image types of workload in your cluster and emit the findings as prometheus metrics.
@@ -21,7 +28,7 @@ syft localhost:5000/go-discovery:v1 -o spdx-json > go-discovery.spdx.json
 # OPTIONALLY remove any previous signatures
 # cosign clean IMAGE:TAG
 
-DIGEST=$(docker inspect localhost:5000/go-discovery:v1 |jq -c 'first'| jq .RepoDigests | jq -c 'first' | tr -d '"')
+DIGEST=$(crane digest localhost:5000/go-discovery:v1)
 
 cosign attest --type spdxjson \
  --predicate go-discovery.spdx.json \
@@ -33,5 +40,5 @@ cosign attest --type spdxjson \
 ```bash
 helm repo add sigstore https://sigstore.github.io/helm-charts
 helm repo update
-helm upgrade --install policy-controller -n cosign-system sigstore/policy-controller --create-namespace --set webhook.image.repository=cgr.dev/ky-rafaels.example.com/sigstore-policy-controller
+helm upgrade --install policy-controller -n cosign-system sigstore/policy-controller --create-namespace --set webhook.image.repository=cgr.dev/ky-rafaels.example.com/sigstore-policy-controller:0.12 --set webhook.image.version=sha256:14447007e2ebd457735f6303209424de0db6ad477e12a98c89b2bfceb1ac0026
 ```
