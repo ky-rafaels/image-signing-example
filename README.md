@@ -35,6 +35,15 @@ cosign attest --type spdxjson \
  $DIGEST
 ```
 
+## Create a CA bundle
+
+Install cert-manager and trust manager using the steps [here](https://github.com/ky-rafaels/java-certs-with-containers.git) or create ca bundle manually.
+
+If trust-manager and cert-manager are installed
+```bash
+k apply -f ca-certs/bundle.yaml
+```
+
 ## Install sigstore policy controller
 
 ```bash
