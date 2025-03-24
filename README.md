@@ -7,7 +7,7 @@
 <!-- - syft -->
 - cosign
 
-## Build an image
+## Setup 
 
 For this example we are going to use a kubernetes discovery service as our sample app. This particular app intends to collect the image types of workload in your cluster and emit the findings as prometheus metrics.
 
@@ -19,30 +19,6 @@ First clone the project [here](git@github.com:ky-rafaels/kind-cluster.git) and f
 git clone git@github.com:ky-rafaels/k8s-image-type-discovery.git
 docker build --provenance=true --sbom=true --push --tag localhost:5000/go-discovery:v1 .
 ```
-
-## Create an SBOM and Attest to Image
-
-```bash
-syft localhost:5000/go-discovery:v1 -o spdx-json > go-discovery.spdx.json
-
-# OPTIONALLY remove any previous signatures
-# cosign clean IMAGE:TAG
-
-DIGEST=$(crane digest localhost:5000/go-discovery:v1)
-
-cosign attest --type spdxjson \
- --predicate go-discovery.spdx.json \
- $DIGEST
-```
-
-<!-- ## Create a CA bundle
-
-Install cert-manager and trust manager using the steps [here](https://github.com/ky-rafaels/java-certs-with-containers.git) or create ca bundle manually.
-
-If trust-manager and cert-manager are installed you can apply this bundle directly
-```bash
-k apply -f ca-certs/bundle.yaml
-``` -->
 
 ## Install and setup sigstore policy controller
 
@@ -71,3 +47,42 @@ Create namespace and label to enable validation of signed images
 ```bash
 kubectl create ns go-discover && kubectl label ns go-discover policy.sigstore.dev/include="true"
 ```
+
+## Create an SBOM and Attest to Image
+
+```bash
+syft localhost:5000/go-discovery:v1 -o spdx-json > go-discovery.spdx.json
+
+# OPTIONALLY remove any previous signatures
+# cosign clean IMAGE:TAG
+
+DIGEST=$(crane digest localhost:5000/go-discovery:v1)
+
+cosign attest --type spdxjson \
+ --predicate go-discovery.spdx.json \
+ $DIGEST
+```
+
+# Validating Signature Using Public Rekor
+
+
+# Validating Signature Using self-managed Rekor instance
+
+Deploy rekor helm chart with chainguard images
+
+```bash
+helm upgrade --install rekor -n cosign-system sigstore/rekor \
+--set server.image.registry=cgr.dev \
+--set server.image.repository=ky-rafaels.example.com/rekor-server \
+--set server.image.version=1.3.9 # replace with digest
+# --set 
+```
+
+<!-- ## Create a CA bundle
+
+Install cert-manager and trust manager using the steps [here](https://github.com/ky-rafaels/java-certs-with-containers.git) or create ca bundle manually.
+
+If trust-manager and cert-manager are installed you can apply this bundle directly
+```bash
+k apply -f ca-certs/bundle.yaml
+``` -->
