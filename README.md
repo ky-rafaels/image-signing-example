@@ -79,6 +79,12 @@ EOF
 
 # Validating Signature Using self-managed Rekor & Fulcio instance
 
+Deploy keycloak to use as OIDC provider
+
+```bash
+helm install 
+```
+
 Deploy rekor using helm chart 
 
 ```bash
@@ -118,8 +124,8 @@ spec:
     - keyless:
         url: http://fulcio.fulcio-system.svc.cluster.local
         identities:
-          - issuer: https://token.actions.githubusercontent.com
-            subject: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
+        - issuer: "http://keycloak.keycloak.svc.cluster.local
+          subjectRegExp: ".*@example.com" # Adjust as needed
       ctlog:
         url: http://rekor.rekor-system.svc.cluster.local
 EOF
