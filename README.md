@@ -49,7 +49,7 @@ Create namespace and label to enable validation of signed images
 kubectl create ns go-discover && kubectl label ns go-discover policy.sigstore.dev/include="true"
 ```
 
-## Create an SBOM and Attest to Image
+<!-- ## Create an SBOM and Attest to Image
 
 ```bash
 syft localhost:5000/go-discovery:v1 -o spdx-json > go-discovery.spdx.json
@@ -62,7 +62,7 @@ DIGEST=$(crane digest localhost:5000/go-discovery:v1)
 cosign attest --type spdxjson \
  --predicate go-discovery.spdx.json \
  $DIGEST
-```
+``` -->
 
 # Validating Signature Using Public Rekor
 
