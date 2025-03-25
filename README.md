@@ -92,8 +92,11 @@ Deploy fulcio using helm chart
 ```bash
 helm upgrade --install fulcio -n cosign-system sigstore/fulcio \
 --set server.image.registry=cgr.dev \
---set server.image.repository=ky-rafaels.example.com/ \
---set server.image.version=1.6.6
+--set server.image.repository=ky-rafaels.example.com/fulcio \
+--set server.image.version=1.6.6 \
+--set createcerts.image.registry=cgr.dev \
+--set createcerts.image.repository=ky-rafaels.example.com/sigstore-scaffolding-fulcio-createcerts \
+--set createcerts.image.version=0.7.21
 ```
 
 # Validating Image Signatures with Custom Key
