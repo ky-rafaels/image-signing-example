@@ -74,6 +74,7 @@ spec:
             subject: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
       ctlog:
         url: https://rekor.sigstore.dev
+EOF
 ```
 
 # Validating Signature Using self-managed Rekor & Fulcio instance
@@ -81,22 +82,47 @@ spec:
 Deploy rekor using helm chart 
 
 ```bash
-helm upgrade --install rekor -n cosign-system sigstore/rekor \
+helm upgrade --install rekor -n rekor-system sigstore/rekor \
 --set server.image.registry=cgr.dev \
 --set server.image.repository=ky-rafaels.example.com/rekor-server \
---set server.image.version=1.3.9 # replace with digest
+--set server.image.version=1.3.9 \
+--set redis.enabled=true \
+--create-namespace
 ```
 
 Deploy fulcio using helm chart
 
 ```bash
-helm upgrade --install fulcio -n cosign-system sigstore/fulcio \
+helm upgrade --install fulcio -n fulcio-system sigstore/fulcio \
+--create-namespace \
+--set server.args.rekorURL=http://rekor.rekor-system.svc.cluster.local \
 --set server.image.registry=cgr.dev \
 --set server.image.repository=ky-rafaels.example.com/fulcio \
 --set server.image.version=1.6.6 \
 --set createcerts.image.registry=cgr.dev \
 --set createcerts.image.repository=ky-rafaels.example.com/sigstore-scaffolding-fulcio-createcerts \
 --set createcerts.image.version=0.7.21
+```
+
+```bash
+cat << EOF > custom-key-validation.yaml
+---
+apiVersion: policy.sigstore.dev/v1beta1
+kind: ClusterImagePolicy
+metadata:
+  name: disconnected-key-validation
+spec:
+  images:
+    - glob: cgr.dev/ky-rafaels.example.com/**
+  authorities:
+    - keyless:
+        url: http://fulcio.fulcio-system.svc.cluster.local
+        identities:
+          - issuer: https://token.actions.githubusercontent.com
+            subject: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
+      ctlog:
+        url: http://rekor.rekor-system.svc.cluster.local
+EOF
 ```
 
 # Validating Image Signatures with Custom Key
