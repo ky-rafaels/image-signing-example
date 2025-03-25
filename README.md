@@ -101,13 +101,7 @@ Deploy fulcio using helm chart
 ```bash
 helm upgrade --install fulcio -n fulcio-system sigstore/fulcio \
 --create-namespace \
---set server.args.rekorURL=http://rekor.rekor-system.svc.cluster.local \
---set server.image.registry=cgr.dev \
---set server.image.repository=ky-rafaels.example.com/fulcio \
---set server.image.version=1.6.6 \
---set createcerts.image.registry=cgr.dev \
---set createcerts.image.repository=ky-rafaels.example.com/sigstore-scaffolding-fulcio-createcerts \
---set createcerts.image.version=0.7.21
+--values ./helm/fulcio-values.yaml
 ```
 
 ```bash
