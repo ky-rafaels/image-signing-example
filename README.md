@@ -76,15 +76,24 @@ spec:
         url: https://rekor.sigstore.dev
 ```
 
-# Validating Signature Using self-managed Rekor instance
+# Validating Signature Using self-managed Rekor & Fulcio instance
 
-Deploy rekor helm chart with chainguard images
+Deploy rekor using helm chart 
 
 ```bash
 helm upgrade --install rekor -n cosign-system sigstore/rekor \
 --set server.image.registry=cgr.dev \
 --set server.image.repository=ky-rafaels.example.com/rekor-server \
 --set server.image.version=1.3.9 # replace with digest
+```
+
+Deploy fulcio using helm chart
+
+```bash
+helm upgrade --install fulcio -n cosign-system sigstore/fulcio \
+--set server.image.registry=cgr.dev \
+--set server.image.repository=ky-rafaels.example.com/ \
+--set server.image.version=1.6.6
 ```
 
 # Validating Image Signatures with Custom Key

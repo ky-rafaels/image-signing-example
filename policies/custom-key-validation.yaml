@@ -2,7 +2,6 @@ apiVersion: policy.sigstore.dev/v1alpha1
 kind: ClusterImagePolicy
 metadata:
   name: disconnected-key-validation
-  namespace: default
 spec:
   images:
   - glob: "**"
