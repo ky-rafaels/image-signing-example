@@ -22,6 +22,8 @@ helm upgrade --install fulcio -n fulcio-system sigstore/fulcio \
 --values ./helm/fulcio-values.yaml
 ```
 
+Apply Cluster Image Policy custom resource
+
 ```bash
 cat << EOF > custom-key-validation.yaml
 ---
