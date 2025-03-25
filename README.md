@@ -4,8 +4,8 @@
 - docker
 - kubectl
 - crane
-<!-- - syft -->
 - cosign
+<!-- - syft -->
 
 ## Setup 
 
@@ -18,6 +18,7 @@ First clone the project [here](git@github.com:ky-rafaels/kind-cluster.git) and f
 ```bash
 git clone git@github.com:ky-rafaels/k8s-image-type-discovery.git
 docker build --provenance=true --sbom=true --push --tag localhost:5000/go-discovery:v1 .
+# docker build --provenance=true --sbom=true --push --tag ttl.sh/go-discovery:1h .
 ```
 
 ## Install and setup sigstore policy controller
@@ -65,6 +66,29 @@ cosign attest --type spdxjson \
 
 # Validating Signature Using Public Rekor
 
+```bash
+cat << EOF >> keyless-rekor-public.yaml
+---
+apiVersion: policy.sigstore.dev/v1beta1
+kind: ClusterImagePolicy
+metadata:
+  name: chainguard-images-are-signed
+  annotations:
+    catalog.chainguard.dev/title: Chainguard Images
+    catalog.chainguard.dev/description: Enforce Chainguard images are signed
+    catalog.chainguard.dev/labels: chainguard
+spec:
+  images:
+    - glob: cgr.dev/ky-rafaels.example.com/**
+  authorities:
+    - keyless:
+        url: https://fulcio.sigstore.dev
+        identities:
+          - issuer: https://token.actions.githubusercontent.com
+            subject: https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main
+      ctlog:
+        url: https://rekor.sigstore.dev
+```
 
 # Validating Signature Using self-managed Rekor instance
 
@@ -75,7 +99,6 @@ helm upgrade --install rekor -n cosign-system sigstore/rekor \
 --set server.image.registry=cgr.dev \
 --set server.image.repository=ky-rafaels.example.com/rekor-server \
 --set server.image.version=1.3.9 # replace with digest
-# --set 
 ```
 
 <!-- ## Create a CA bundle
