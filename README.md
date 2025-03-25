@@ -18,8 +18,10 @@ First clone the project [here](git@github.com:ky-rafaels/kind-cluster.git) and f
 ```bash
 git clone git@github.com:ky-rafaels/k8s-image-type-discovery.git
 cd k8s-image-type-discovery
-docker build --provenance=true --sbom=true --push --tag localhost:5000/go-discovery:v1 .
-# docker build --provenance=true --sbom=true --push --tag ttl.sh/go-discovery:1h .
+docker build --provenance=true --sbom=true --push --tag ttl.sh/go-discovery:1h .
+
+# Optionally push to local registry deployed from kind-cluster deployment steps
+# docker build --provenance=true --sbom=true --push --tag localhost:5000/go-discovery:v1 .
 ```
 
 Create namespace and label to enable validation of signed images
@@ -47,21 +49,6 @@ helm upgrade --install policy-controller -n cosign-system sigstore/policy-contro
 --set webhook.registryCaBundle.name=chainguard.dev \
 --set webhook.registryCaBundle.key=bundle.pem
 ```
-
-<!-- ## Create an SBOM and Attest to Image
-
-```bash
-syft localhost:5000/go-discovery:v1 -o spdx-json > go-discovery.spdx.json
-
-# OPTIONALLY remove any previous signatures
-# cosign clean IMAGE:TAG
-
-DIGEST=$(crane digest localhost:5000/go-discovery:v1)
-
-cosign attest --type spdxjson \
- --predicate go-discovery.spdx.json \
- $DIGEST
-``` -->
 
 # Validating Signature Using Public Rekor
 
@@ -100,11 +87,14 @@ helm upgrade --install rekor -n cosign-system sigstore/rekor \
 --set server.image.version=1.3.9 # replace with digest
 ```
 
-<!-- ## Create a CA bundle
+# Validating Image Signatures with Custom Key
 
-Install cert-manager and trust manager using the steps [here](https://github.com/ky-rafaels/java-certs-with-containers.git) or create ca bundle manually.
+Create a key
 
-If trust-manager and cert-manager are installed you can apply this bundle directly
 ```bash
-k apply -f ca-certs/bundle.yaml
-``` -->
+❯ cosign generate-key-pair
+Enter password for private key:
+Enter password for private key again:
+Private key written to cosign.key
+Public key written to cosign.pub
+```

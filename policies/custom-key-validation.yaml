@@ -1,7 +1,7 @@
 apiVersion: policy.sigstore.dev/v1alpha1
 kind: ClusterImagePolicy
 metadata:
-  name: custom-key-attestation-sbom-spdxjson
+  name: disconnected-key-validation
   namespace: default
 spec:
   images:
@@ -11,15 +11,15 @@ spec:
     key:
       data: |
         -----BEGIN PUBLIC KEY-----
-        MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEOc6HkISHzVdUbtUsdjYtPuyPYBeg
-        4FCemyVurIM4KEORQk4OAu8ZNwxvGSoY3eAabYaFIPPQ8ROAjrbdPwNdJw==
+        MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDWIh6o7q+081RuGUqYVV+DyLwTNV
+        1D4AbR7QMgejYT5zffY4asCkW9KYl7ZVRuic8IEUQ8PzXo3kLE++KP34/w==
         -----END PUBLIC KEY-----
     ctlog:
       url: https://rekor.sigstore.dev
-  - attestations:
-    - name: must-have-spdxjson
-      predicateType: spdxjson
-      policy:
-        type: cue
-        data: |
-          predicateType: "https://spdx.dev/Document"
+  # - attestations:
+  #   - name: must-have-spdxjson
+  #     predicateType: spdxjson
+  #     policy:
+  #       type: cue
+  #       data: |
+  #         predicateType: "https://spdx.dev/Document"

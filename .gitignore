@@ -1,2 +1,4 @@
 # Ignoring certs dir
 ca-certs/
+cosign.key
+cosign.pub
