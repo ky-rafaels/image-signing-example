@@ -29,16 +29,19 @@ helm upgrade --install fulcio -n fulcio-system sigstore/fulcio \
 --values ./helm/fulcio-values.yaml
 ```
 
-## Setup DNS resolution using /etc/hosts
+## Deploy Ingress and Setup DNS resolution
 
 ```bash
-# First find ExternalIP of Ingress 
-kubectl get svc -n 
+kubectl apply -f https://kind.sigs.k8s.io/examples/ingress/deploy-ingress-nginx.yaml
+
+# Find ExternalIP of Ingress 
+kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+172.18.102.1  # returned
 
 cat <<EOF | sudo tee -a /etc/hosts
-192.168.1.100 keycloak.ky-rafaels.example.com
-192.168.1.100 rekor.ky-rafaels.example.com
-192.168.1.100 fulcio.ky-rafaels.example.com
+172.18.102.1 keycloak.ky-rafaels.example.com
+172.18.102.1 rekor.ky-rafaels.example.com
+172.18.102.1 fulcio.ky-rafaels.example.com
 EOF
 ```
 
