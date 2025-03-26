@@ -59,9 +59,9 @@ spec:
     - glob: cgr.dev/ky-rafaels.example.com/**
   authorities:
     - keyless:
-        url: http://fulcio.fulcio-system.svc.cluster.local
+        url: http://fulcio.ky-rafaels.example.com
         identities:
-        - issuer: "http://keycloak.keycloak.svc.cluster.local
+        - issuer: "http://keycloak.ky-rafaels.example.com
           subjectRegExp: ".*@example.com" # Adjust as needed
       ctlog:
         url: http://rekor.rekor-system.svc.cluster.local
