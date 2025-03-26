@@ -3,7 +3,9 @@
 Deploy keycloak to use as OIDC provider
 
 ```bash
-helm install 
+helm upgrade --install keycloak -n keycloak bitnami/keycloak \
+--create-namespace \
+--values ./helm/keycloak-values.yaml
 ```
 
 Deploy rekor using helm chart 
