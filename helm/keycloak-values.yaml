@@ -1,12 +1,12 @@
 production: true
 proxyHeaders: xforwarded
-customCaExistingSecret: ca-cert
+# customCaExistingSecret: ca-cert
 global:
-  imageRegistry: ""
+  imageRegistry: "cgr.dev/ky-rafaels.example.com"
 image:
-  registry: docker.io
-  repository: chainguard/keycloak
-  tag: latest
+  # registry: docker.io
+  repository: keycloak-bitnami 
+  tag: "26.1.4"
 auth:
   adminUser: admin
   adminPassword: admin
@@ -19,7 +19,7 @@ containerSecurityContext:
   runAsGroup: 1001
   runAsNonRoot: true
   privileged: false
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
@@ -39,9 +39,9 @@ tls:
   passwordsSecret: ""
 enableDefaultInitContainers: true 
 args:
-  - start
+  - start-dev
   - --hostname 
-  - https://keycloak..chainguard.dev
+  - https://keycloak.chainguard.dev
   # - --optimized
 extraVolumes: []
 extraVolumeMounts: []
@@ -60,9 +60,9 @@ postgresql:
     # existingSecret: "keycloak-postgres-password"
   architecture: standalone
   image:
-    registry: docker.io
-    repository: chainguard/postgres-helm-compat
-    tag: latest
+    # registry: docker.io
+    repository: postgres-bitnami
+    tag: "17.4"
 logging:
   output: default
   level: ALL
