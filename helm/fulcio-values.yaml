@@ -2,7 +2,7 @@ server:
   args:
     oidcIssuer: "https://keycloak.example.com/auth/realms/sigstore"
     oidcClientID: "fulcio-client"
-    oidcClientSecret: "<client-secret-from-keycloak>"
+    # oidcClientSecret: "<client-secret-from-keycloak>"
     oidcRedirectURL: "http://fulcio.example.com/v1/callback"
     rekorURL: http://rekor.rekor-system.svc.cluster.local
   image:

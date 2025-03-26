@@ -1,6 +1,8 @@
 # Validating Signature Using self-managed Rekor & Fulcio instance
 
-Deploy keycloak to use as OIDC provider
+## Setup keycloak as OIDC provider
+
+Deploy keycloak using Bitnami helm chart with Chainguard images
 
 ```bash
 helm upgrade --install keycloak -n keycloak bitnami/keycloak \
@@ -8,7 +10,7 @@ helm upgrade --install keycloak -n keycloak bitnami/keycloak \
 --values ./helm/keycloak-values.yaml
 ```
 
-Deploy rekor using helm chart 
+## Setup Rekor
 
 ```bash
 helm upgrade --install rekor -n rekor-system sigstore/rekor \
@@ -16,15 +18,31 @@ helm upgrade --install rekor -n rekor-system sigstore/rekor \
 --values ./helm/rekor-values.yaml
 ```
 
+## Setup Fulcio
+
 Deploy fulcio using helm chart
 
 ```bash
 helm upgrade --install fulcio -n fulcio-system sigstore/fulcio \
 --create-namespace \
+--set server.args.oidcClientSecret=
 --values ./helm/fulcio-values.yaml
 ```
 
-Apply Cluster Image Policy custom resource
+## Setup DNS resolution using /etc/hosts
+
+```bash
+# First find ExternalIP of Ingress 
+kubectl get svc -n 
+
+cat <<EOF | sudo tee -a /etc/hosts
+192.168.1.100 keycloak.ky-rafaels.example.com
+192.168.1.100 rekor.ky-rafaels.example.com
+192.168.1.100 fulcio.ky-rafaels.example.com
+EOF
+```
+
+## Apply Cluster Image Policy custom resource
 
 ```bash
 cat << EOF > custom-key-validation.yaml
