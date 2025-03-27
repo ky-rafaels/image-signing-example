@@ -10,6 +10,50 @@ helm upgrade --install keycloak -n keycloak bitnami/keycloak \
 --values ./helm/keycloak-values.yaml
 ```
 
+Next lets get Keycloak setup
+
+```bash
+export KEYCLOAK_ENDPOINT=$(kubectl -n keycloak get service keycloak -o jsonpath='{.status.loadBalancer.ingress[0].*}')
+
+export KEYCLOAK_URL=http://${KEYCLOAK_ENDPOINT}:8080/auth
+```
+
+And then we can make requests to Keycloak to configure the client and the users:
+
+```bash
+export KEYCLOAK_TOKEN=$(curl -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" "$KEYCLOAK_URL/realms/master/protocol/openid-connect/token" | jq -r .access_token)
+echo $KEYCLOAK_TOKEN
+
+# Create initial token to register the client
+read -r client token <<<$(curl -H "Authorization: Bearer ${KEYCLOAK_TOKEN}" -X POST -H "Content-Type: application/json" -d '{"expiration": 0, "count": 1}' $KEYCLOAK_URL/admin/realms/master/clients-initial-access | jq -r '[.id, .token] | @tsv')
+
+# Register the client
+read -r id secret <<<$(curl -X POST -d "{ \"clientId\": \"${client}\" }" -H "Content-Type:application/json" -H "Authorization: bearer ${token}" ${KEYCLOAK_URL}/realms/master/clients-registrations/default| jq -r '[.id, .secret] | @tsv')
+
+# Add allowed redirect URIs
+curl -H "Authorization: Bearer ${KEYCLOAK_TOKEN}" -X PUT \
+  -H "Content-Type: application/json" -d "{\"serviceAccountsEnabled\": true, \"directAccessGrantsEnabled\": true, \"authorizationServicesEnabled\": true, \"redirectUris\": [\"http://fulcio.ky-rafaels.example.com/v1/callback\"]}" $KEYCLOAK_URL/admin/realms/master/clients/${id}
+
+# Add the group attribute in the JWT token returned by Keycloak
+curl -H "Authorization: Bearer ${KEYCLOAK_TOKEN}" -X POST -H "Content-Type: application/json" -d '{"name": "group", "protocol": "openid-connect", "protocolMapper": "oidc-usermodel-attribute-mapper", "config": {"claim.name": "group", "jsonType.label": "String", "user.attribute": "group", "id.token.claim": "true", "access.token.claim": "true"}}' $KEYCLOAK_URL/admin/realms/master/clients/${id}/protocol-mappers/models
+
+# Add the subscription attribute in the JWT token returned by Keycloak
+curl -H "Authorization: Bearer ${KEYCLOAK_TOKEN}" -X POST -H "Content-Type: application/json" -d '{"name": "subscription", "protocol": "openid-connect", "protocolMapper": "oidc-usermodel-attribute-mapper", "config": {"claim.name": "subscription", "jsonType.label": "String", "user.attribute": "subscription", "id.token.claim": "true", "access.token.claim": "true"}}' $KEYCLOAK_URL/admin/realms/master/clients/${id}/protocol-mappers/models
+
+# Create regular user for ACME Corp.
+curl -H "Authorization: Bearer ${KEYCLOAK_TOKEN}" -X POST -H "Content-Type: application/json" -d '{"username": "user1", "email": "user1@acme.com", "enabled": true, "attributes": {"group": "users", "subscription": "enterprise"}, "credentials": [{"type": "password", "value": "password", "temporary": false}]}' $KEYCLOAK_URL/admin/realms/master/users
+
+# Create regular user for Umbrella Corp.
+# curl -H "Authorization: Bearer ${KEYCLOAK_TOKEN}" -X POST -H "Content-Type: application/json" -d '{"username": "user2", "email": "user2@umbrella.com", "enabled": true, "attributes": {"group": "users", "subscription": "free"}, "credentials": [{"type": "password", "value": "password", "temporary": false}]}' $KEYCLOAK_URL/admin/realms/master/users
+
+# Create admin user
+curl -H "Authorization: Bearer ${KEYCLOAK_TOKEN}" -X POST -H "Content-Type: application/json" -d '{"username": "admin1", "email": "admin1@chainguard.dev", "enabled": true, "attributes": {"group": "admin"}, "credentials": [{"type": "password", "value": "password", "temporary": false}]}' $KEYCLOAK_URL/admin/realms/master/users
+```
+
+**Note: If you get a Not Authorized error, please, re-run this command and continue from the command that started to fail:
+
+KEYCLOAK_TOKEN=$(curl -d "client_id=admin-cli" -d "username=admin" -d "password=admin" -d "grant_type=password" "$KEYCLOAK_URL/realms/master/protocol/openid-connect/token" | jq -r .access_token)**
+
 ## Setup Rekor
 
 ```bash
