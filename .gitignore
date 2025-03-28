@@ -2,4 +2,3 @@
 ca-certs/
 cosign.key
 cosign.pub
-extras/

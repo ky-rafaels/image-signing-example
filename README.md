@@ -79,7 +79,7 @@ EOF
 
 # Validating Image Signatures with Custom Key
 
-Create a key
+Create a custom local key and sign an image
 
 ```bash
 ❯ cosign generate-key-pair
@@ -87,4 +87,44 @@ Enter password for private key:
 Enter password for private key again:
 Private key written to cosign.key
 Public key written to cosign.pub
+
+docker build --provenance=true --sbom=true --push --tag ttl.sh/go-discovery:1h .
+
+IMAGE=ttl.sh/go-discovery:1h@sha256:5d449cce70519f1a6f269a183c298712ac55131a14e48bbe2077f8cff02bf112
+
+# remove signature and resign
+cosign clean $IMAGE
+
+# sign image with key
+cosign sign --key cosign.key $IMAGE
+```
+
+Apply a clusterImagePolicy to sigstore controller to validate signatures using the new custom key 
+
+```yaml
+---
+apiVersion: policy.sigstore.dev/v1alpha1
+kind: ClusterImagePolicy
+metadata:
+  name: custom-key-attestation-sbom-spdxjson
+spec:
+  images:
+  - glob: "ttl.sh/*"
+  authorities:
+  - name: custom-key
+    key:
+      data: |
+        -----BEGIN PUBLIC KEY-----
+        MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEDWIh6o7q+081RuGUqYVV+DyLwTNV
+        1D4AbR7QMgejYT5zffY4asCkW9KYl7ZVRuic8IEUQ8PzXo3kLE++KP34/w==
+        -----END PUBLIC KEY-----
+    ctlog:
+      url: https://rekor.sigstore.dev
+    attestations:
+    - name: must-have-spdxjson
+      predicateType: spdxjson
+      policy:
+        type: cue
+        data: |
+          predicateType: "https://spdx.dev/Document"
 ```
