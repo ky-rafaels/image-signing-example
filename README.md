@@ -101,7 +101,8 @@ cosign sign --key cosign.key $IMAGE
 
 Apply a clusterImagePolicy to sigstore controller to validate signatures using the new custom key 
 
-```yaml
+```bash
+cat <<EOF > custom-key-validation.yaml
 ---
 apiVersion: policy.sigstore.dev/v1alpha1
 kind: ClusterImagePolicy
@@ -127,4 +128,34 @@ spec:
         type: cue
         data: |
           predicateType: "https://spdx.dev/Document"
+EOF
+
+kubectl apply -f custom-key-validation.yaml
+```
+
+Deploy sample app
+
+```bash
+kubectl run go-discover -n default --image=$IMAGE
+```
+
+Check logs on sigstore policy controller to ensure image signature passed validation
+
+```json
+❯ k logs policy-controller-webhook-6489c6fff5-29pgl |grep Validated | jq
+{
+  "level": "info",
+  "ts": "2025-03-28T15:43:56.341Z",
+  "logger": "policy-controller",
+  "caller": "webhook/validator.go:1166",
+  "msg": "Validated 1 policies for image ttl.sh/go-discovery:1h@sha256:5d449cce70519f1a6f269a183c298712ac55131a14e48bbe2077f8cff02bf112",
+  "commit": "4a12093-dirty",
+  "knative.dev/kind": "/v1, Kind=Pod",
+  "knative.dev/namespace": "default",
+  "knative.dev/name": "go-discover",
+  "knative.dev/operation": "CREATE",
+  "knative.dev/resource": "/v1, Resource=pods",
+  "knative.dev/subresource": "",
+  "knative.dev/userinfo": "kubernetes-admin"
+}
 ```

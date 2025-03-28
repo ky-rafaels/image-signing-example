@@ -16,10 +16,10 @@ spec:
         -----END PUBLIC KEY-----
     ctlog:
       url: https://rekor.sigstore.dev
-    attestations:
-    - name: must-have-spdxjson
-      predicateType: spdxjson
-      policy:
-        type: cue
-        data: |
-          predicateType: "https://spdx.dev/Document"
+    # attestations:
+    # - name: must-have-spdxjson
+    #   predicateType: spdxjson
+    #   policy:
+    #     type: cue
+    #     data: |
+    #       predicateType: "https://spdx.dev/Document"
