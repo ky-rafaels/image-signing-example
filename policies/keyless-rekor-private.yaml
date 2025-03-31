@@ -1,0 +1,16 @@
+---
+apiVersion: policy.sigstore.dev/v1beta1
+kind: ClusterImagePolicy
+metadata:
+  name: disconnected-key-validation
+spec:
+  images:
+    - glob: cgr.dev/ky-rafaels.example.com/**
+  authorities:
+    - keyless:
+        url: http://fulcio.ky-rafaels.example.com
+        identities:
+        - issuer: "http://keycloak.ky-rafaels.example.com
+          subjectRegExp: ".*@example.com" # Adjust as needed
+      ctlog:
+        url: http://rekor.rekor-system.svc.cluster.local
