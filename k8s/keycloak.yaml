@@ -46,12 +46,12 @@ spec:
           containerPort: 8080
         readinessProbe:
           httpGet:
-            path: /realms/workshop
+            path: /realms/sigstore
             port: 8080
         volumeMounts:
-        - name: realms
+        - name: sigstore-realm
           mountPath: /opt/keycloak/data/import
       volumes:
-      - name: realms
+      - name: sigstore-realm
         configMap:
-          name: realms
+          name: sigstore-realm 
