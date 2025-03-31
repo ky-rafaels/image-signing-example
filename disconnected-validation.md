@@ -36,7 +36,7 @@ export KEYCLOAK_URL=http://${KEYCLOAK_ENDPOINT}:8080/auth
 ```bash
 helm upgrade --install rekor -n rekor-system sigstore/rekor \
 --create-namespace \
---values ./helm/rekor-values.yaml
+--values ./k8s/helm/rekor-values.yaml
 ```
 
 ## Setup Fulcio
@@ -47,7 +47,7 @@ Deploy fulcio using helm chart
 helm upgrade --install fulcio -n fulcio-system sigstore/fulcio \
 --create-namespace \
 --set server.args.oidcClientSecret=
---values ./helm/fulcio-values.yaml
+--values ./k8s/helm/fulcio-values.yaml
 ```
 
 ## Deploy Ingress and Setup DNS resolution
@@ -60,9 +60,9 @@ kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.status.
 172.18.102.1  # returned
 
 cat <<EOF | sudo tee -a /etc/hosts
-172.18.102.1 keycloak.ky-rafaels.example.com
-172.18.102.1 rekor.ky-rafaels.example.com
-172.18.102.1 fulcio.ky-rafaels.example.com
+172.18.101.1 keycloak.example.com
+172.18.102.1 rekor.example.com
+172.18.102.1 fulcio.example.com
 EOF
 ```
 
