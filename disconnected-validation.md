@@ -2,27 +2,34 @@
 
 ## Setup keycloak as OIDC provider
 
-Deploy keycloak using Bitnami helm chart with Chainguard images
+Deploy keycloak and import sigstore realm 
+
+```bash
+kubectl create ns keycloak && kubectl apply -f k8s/realm-cm.yaml
+kubectl apply -f k8s/keycloak.yaml
+```
+
+<!-- Deploy keycloak using Bitnami helm chart with Chainguard images
 
 ```bash
 helm upgrade --install keycloak -n keycloak bitnami/keycloak \
 --create-namespace \
---values ./helm/keycloak-values.yaml
-```
+--values ./helm/bitnami-keycloak/keycloak-values.yaml
+``` -->
 
-Next lets get Keycloak setup
+<!-- Next lets get Keycloak setup
 
 ```bash
 export KEYCLOAK_ENDPOINT=$(kubectl -n keycloak get service keycloak -o jsonpath='{.status.loadBalancer.ingress[0].*}')
 
 export KEYCLOAK_URL=http://${KEYCLOAK_ENDPOINT}:8080/auth
-```
+``` -->
 
-Next run a script to setup the sigstore realm for your fulcio client
+<!-- Next run a script to setup the sigstore realm for your fulcio client
 
 ```bash
 ./scripts/token.sh
-```
+``` -->
 
 ## Setup Rekor
 
