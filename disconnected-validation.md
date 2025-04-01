@@ -39,6 +39,7 @@ export KEYCLOAK_URL=http://${KEYCLOAK_ENDPOINT}:8080/auth
 ```bash
 helm upgrade --install rekor -n rekor-system sigstore/rekor \
 --create-namespace \
+--version 1.6.8 \
 --values ./k8s/helm/rekor-values.yaml
 ```
 
@@ -58,13 +59,12 @@ helm upgrade --install fulcio -n fulcio-system sigstore/fulcio \
 kubectl apply -f https://kind.sigs.k8s.io/examples/ingress/deploy-ingress-nginx.yaml
 
 # Find ExternalIP of Ingress 
-kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
-172.18.102.1  # returned
+INGRESS=$(kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 
 cat <<EOF | sudo tee -a /etc/hosts
 ${KEYCLOAK_IP} keycloak.example.com
-172.18.102.1 rekor.example.com
-172.18.102.1 fulcio.example.com
+${INGRESS} rekor.example.com
+${INGRESS} fulcio.example.com
 EOF
 ```
 
