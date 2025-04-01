@@ -7,6 +7,9 @@ Deploy keycloak and import sigstore realm
 ```bash
 kubectl create ns keycloak && kubectl apply -f k8s/realm-cm.yaml
 kubectl apply -f k8s/keycloak.yaml
+
+# Save IP of loadbalancer svc for keycloak frontend
+KEYCLOAK_IP=$(kubectl get svc -n keycloak keycloak -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 ```
 
 <!-- Deploy keycloak using Bitnami helm chart with Chainguard images
@@ -46,7 +49,6 @@ Deploy fulcio using helm chart
 ```bash
 helm upgrade --install fulcio -n fulcio-system sigstore/fulcio \
 --create-namespace \
---set server.args.oidcClientSecret=
 --values ./k8s/helm/fulcio-values.yaml
 ```
 
@@ -60,7 +62,7 @@ kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.status.
 172.18.102.1  # returned
 
 cat <<EOF | sudo tee -a /etc/hosts
-172.18.101.1 keycloak.example.com
+${KEYCLOAK_IP} keycloak.example.com
 172.18.102.1 rekor.example.com
 172.18.102.1 fulcio.example.com
 EOF

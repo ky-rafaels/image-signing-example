@@ -52,6 +52,8 @@ helm upgrade --install policy-controller -n cosign-system sigstore/policy-contro
 
 # Validating Signature Using Public Rekor
 
+Apply manifest below to validate signatures using the public Rekor and Fulcio endpoints for keyless signature validation
+
 ```bash
 cat << EOF >> keyless-rekor-public.yaml
 ---

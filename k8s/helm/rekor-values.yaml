@@ -3,5 +3,7 @@ server:
     registry: cgr.dev
     repository: ky-rafaels.example.com/rekor-server
     version: 1.3.9 
-redis:
+  ingress:
+    hostname: "rekor.example.com"
+mysql:
   enabled: true
