@@ -5,11 +5,18 @@ server:
     oidcClientSecret: "iHTF2wUHCLtXflgnGXwD4ZI3tAkEIHnM" 
     oidcRedirectURL: "http://fulcio.example.com/v1/callback"
     rekorURL: http://rekor.rekor-system.svc.cluster.local
-  image:
-    registry: cgr.dev
-    repository: ky-rafaels.example.com/fulcio
-    version: "1.6.6"
-createcerts:
-  image:
-    repository: ky-rafaels.example.com/sigstore-scaffolding-fulcio-createcerts
-    version: "0.7.21"
+  ingress:
+    http:
+      enabled: true
+      hosts:
+      - host: fulcio.example.com
+        path: /
+  # image:
+  #   registry: cgr.dev
+  #   repository: ky-rafaels.example.com/fulcio
+  #   version: "1.6.6"
+# createcerts:
+#   image:
+#     registry: cgr.dev
+#     repository: ky-rafaels.example.com/sigstore-scaffolding-fulcio-createcerts
+#     version: "0.7.21"

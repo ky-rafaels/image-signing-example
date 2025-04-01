@@ -9,7 +9,7 @@ kubectl create ns keycloak && kubectl apply -f k8s/realm-cm.yaml
 kubectl apply -f k8s/keycloak.yaml
 
 # Save IP of loadbalancer svc for keycloak frontend
-KEYCLOAK_IP=$(kubectl get svc -n keycloak keycloak -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+export KEYCLOAK_IP=$(kubectl get svc -n keycloak keycloak -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 ```
 
 <!-- Deploy keycloak using Bitnami helm chart with Chainguard images
