@@ -1,5 +1,12 @@
 # Validating Signature Using self-managed Rekor & Fulcio instance
 
+First lets add the sigstore helm repo that we will use to install the sigstore stack
+
+```bash
+helm repo add sigstore https://sigstore.github.io/helm-charts
+helm repo update
+```
+
 ## Setup keycloak as OIDC provider
 
 Deploy keycloak and import sigstore realm 
