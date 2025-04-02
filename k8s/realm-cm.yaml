@@ -805,9 +805,9 @@ data:
           "clientId": "sigstore",
           "name": "sigstore",
           "description": "",
-          "rootUrl": "http://keycloak.example.com",
-          "adminUrl": "http://keycloak.example.com",
-          "baseUrl": "http://keycloak.example.com",
+          "rootUrl": "http://fulcio.example.com",
+          "adminUrl": "http://fulcio.example.com",
+          "baseUrl": "http://fulcio.example.com",
           "surrogateAuthRequired": false,
           "enabled": true,
           "alwaysDisplayInConsole": false,
@@ -913,6 +913,8 @@ data:
           "username": "user1",
           "enabled": true,
           "email": "user1@chainguard.dev",
+          "firstName": "user1",
+          "lastName": "chainguard",
           "attributes": {
             "group": [
               "users"
@@ -930,6 +932,8 @@ data:
           "username": "user2",
           "enabled": true,
           "email": "user2@chainguard.dev",
+          "firstName": "user2",
+          "lastName": "chainguard",
           "attributes": {
             "group": [
               "users"

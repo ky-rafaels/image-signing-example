@@ -79,7 +79,7 @@ EOF
 Using go-discover image
 
 ```bash
-cosign sign --fulcio-url http://fulcio.example.com --oidc-issuer http://keycloak.example.com/realms/sigstore --rekor-url http://rekor.example.com ttl.sh/go-discovery:1h 
+cosign sign --fulcio-url http://fulcio.example.com --oidc-issuer http://keycloak.example.com/realms/sigstore --rekor-url http://rekor.example.com ttl.sh/go-discovery:1h
 ```
 
 You should then be prompted with this below and redirected to keycloak for login via browser
@@ -115,7 +115,7 @@ spec:
         url: http://fulcio.example.com
         identities:
         - issuer: "http://keycloak.example.com
-          subjectRegExp: ".*@example.com" 
+          subjectRegExp: ".*@chainguard.dev" 
       ctlog:
         url: http://rekor.example.com
 EOF
