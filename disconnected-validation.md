@@ -74,6 +74,19 @@ ${INGRESS} rekor.example.com
 ${INGRESS} fulcio.example.com
 EOF
 ```
+
+### Install Docker Mac Net Connect for connecting to exposed services in your KiND cluster
+
+Repo can be found [here](https://github.com/chipmk/docker-mac-net-connect)
+```bash
+brew install chipmk/tap/docker-mac-net-connect
+
+sudo brew services start chipmk/tap/docker-mac-net-connect
+
+# Run in debug mode 
+sudo docker-mac-net-connect 
+```
+
 ## Sign an artifact 
 
 Using go-discover image
