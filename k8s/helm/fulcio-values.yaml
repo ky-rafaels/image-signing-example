@@ -4,7 +4,7 @@ server:
     oidcClientID: "sigstore"
     oidcClientSecret: "iHTF2wUHCLtXflgnGXwD4ZI3tAkEIHnM" 
     oidcRedirectURL: "http://fulcio.example.com/v1/callback"
-    rekorURL: http://rekor.example.com
+    rekorURL: "http://rekor.rekor-system.svc.cluster.local"
   ingress:
     http:
       enabled: true

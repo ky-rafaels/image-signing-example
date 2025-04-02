@@ -127,7 +127,7 @@ spec:
     - keyless:
         url: http://fulcio.example.com
         identities:
-        - issuer: "http://keycloak.example.com
+        - issuer: "http://keycloak.example.com/realms/sigstore"
           subjectRegExp: ".*@chainguard.dev" 
       ctlog:
         url: http://rekor.example.com
