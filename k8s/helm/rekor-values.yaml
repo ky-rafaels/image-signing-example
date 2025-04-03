@@ -1,8 +1,8 @@
 server:
-  image:
-    registry: cgr.dev
-    repository: ky-rafaels.example.com/rekor-server
-    version: 1.3.9 
+  # image:
+  #   registry: cgr.dev
+  #   repository: ky-rafaels.example.com/rekor-server
+  #   version: 1.3.9 
   ingress:
     enabled: true
     hostname: "rekor.example.com"

@@ -3,3 +3,4 @@ ca-certs/
 cosign.key
 cosign.pub
 scripts/
+bak

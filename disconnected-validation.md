@@ -27,19 +27,8 @@ helm upgrade --install keycloak -n keycloak bitnami/keycloak \
 --values ./helm/bitnami-keycloak/keycloak-values.yaml
 ``` -->
 
-<!-- Next lets get Keycloak setup
+<!-- kubectl create secret generic oidc-client-secret --from-literal=clientSecret=iHTF2wUHCLtXflgnGXwD4ZI3tAkEIHnM -n fulcio-system -->
 
-```bash
-export KEYCLOAK_ENDPOINT=$(kubectl -n keycloak get service keycloak -o jsonpath='{.status.loadBalancer.ingress[0].*}')
-
-export KEYCLOAK_URL=http://${KEYCLOAK_ENDPOINT}:8080/auth
-``` -->
-
-<!-- Next run a script to setup the sigstore realm for your fulcio client
-
-```bash
-./scripts/token.sh
-``` -->
 
 ## Setup Rekor
 

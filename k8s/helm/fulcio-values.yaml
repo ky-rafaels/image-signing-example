@@ -1,16 +1,25 @@
 server:
-  args:
-    oidcIssuer: "http://keycloak.example.com/realms/sigstore"
-    oidcClientID: "sigstore"
-    oidcClientSecret: "iHTF2wUHCLtXflgnGXwD4ZI3tAkEIHnM" 
-    oidcRedirectURL: "http://fulcio.example.com/v1/callback"
-    rekorURL: "http://rekor.rekor-system.svc.cluster.local"
+  #   oidcRedirectURL: "http://fulcio.example.com/v1/callback"
+  #   rekorURL: "http://rekor.rekor-system.svc.cluster.local"
   ingress:
     http:
       enabled: true
       hosts:
       - host: fulcio.example.com
         path: /
+config:
+  format: json 
+  contents:
+    {
+      "OIDCIssuers": {
+        "http://keycloak.example.com/realms/sigstore-realm": {
+          "IssuerURL": "http://keycloak.example.com/realms/sigstore",
+          "ClientID": "sigstore",
+          "Type": "email",
+          "IssuerClaim": "iss"
+        }
+      }
+    }
   # image:
   #   registry: cgr.dev
   #   repository: ky-rafaels.example.com/fulcio

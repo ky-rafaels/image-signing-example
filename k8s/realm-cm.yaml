@@ -913,6 +913,7 @@ data:
           "username": "user1",
           "enabled": true,
           "email": "user1@chainguard.dev",
+          "emailVerified": "true",
           "firstName": "user1",
           "lastName": "chainguard",
           "attributes": {
@@ -932,6 +933,7 @@ data:
           "username": "user2",
           "enabled": true,
           "email": "user2@chainguard.dev",
+          "emailVerified": "true",
           "firstName": "user2",
           "lastName": "chainguard",
           "attributes": {
