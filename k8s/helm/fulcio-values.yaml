@@ -19,12 +19,12 @@ config:
           "IssuerClaim": "iss"
         }
       },
-      "CTLogURL": "http://rekor-server.rekor-system.svc.cluster.local",
-      "CertificateAuthority": {
-        "Roots": "<base64-encoded-root-cert>",
-        "Intermediates": "<base64-encoded-intermediate-cert>"
-      }
+      "CTLogURL": "http://rekor.example.com"
     }
+      # "CertificateAuthority": {
+      #   "Roots": "<base64-encoded-root-cert>",
+      #   "Intermediates": "<base64-encoded-intermediate-cert>"
+      # }
   # image:
   #   registry: cgr.dev
   #   repository: ky-rafaels.example.com/fulcio
