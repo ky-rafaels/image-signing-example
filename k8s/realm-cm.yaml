@@ -812,7 +812,7 @@ data:
           "enabled": true,
           "alwaysDisplayInConsole": false,
           "clientAuthenticatorType": "client-secret",
-          "secret": "iHTF2wUHCLtXflgnGXwD4ZI3tAkEIHnM",
+          "secret": "jVWmnxtzYuPxxWqcSZ7F3ueX4K1ATrhA",
           "redirectUris": [
             "*"
           ],

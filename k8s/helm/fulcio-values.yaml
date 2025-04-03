@@ -12,12 +12,17 @@ config:
   contents:
     {
       "OIDCIssuers": {
-        "http://keycloak.example.com/realms/sigstore-realm": {
+        "http://keycloak.example.com/realms/sigstore": {
           "IssuerURL": "http://keycloak.example.com/realms/sigstore",
           "ClientID": "sigstore",
           "Type": "email",
           "IssuerClaim": "iss"
         }
+      },
+      "CTLogURL": "http://rekor-server.rekor-system.svc.cluster.local",
+      "CertificateAuthority": {
+        "Roots": "<base64-encoded-root-cert>",
+        "Intermediates": "<base64-encoded-intermediate-cert>"
       }
     }
   # image:
