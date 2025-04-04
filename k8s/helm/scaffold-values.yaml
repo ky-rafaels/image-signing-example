@@ -55,6 +55,9 @@ tuf:
       hosts:
       - path: /
         host: "tuf.example.com"
+  secrets:
+    tsa:
+      enabled: false
 copySecretJob:
   enabled: true
 tsa:
