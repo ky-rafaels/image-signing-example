@@ -170,15 +170,15 @@ You should get a successful response below
 Lastly lets apply a ClusterImagePolicy for our sigstore policy controller to validate signatures for images signed by our `.*@chainguard.dev` user identities 
 
 ```bash
-cat << EOF > custom-key-validation.yaml
+cat << EOF > disconnected-keyless-validation.yaml
 ---
 apiVersion: policy.sigstore.dev/v1beta1
 kind: ClusterImagePolicy
 metadata:
-  name: disconnected-key-validation
+  name: disconnected-keyless-validation
 spec:
   images:
-    - glob: cgr.dev/ky-rafaels.example.com/**
+    - glob: ttl.sh/**
   authorities:
     - keyless:
         url: http://fulcio.example.com
@@ -188,4 +188,6 @@ spec:
       ctlog:
         url: http://rekor.example.com
 EOF
+
+kubectl apply -f disconnected-keyless-validation.yaml
 ```
