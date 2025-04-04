@@ -61,6 +61,7 @@ cat <<EOF | sudo tee -a /etc/hosts
 ${KEYCLOAK_IP} keycloak.example.com
 ${INGRESS} rekor.example.com
 ${INGRESS} fulcio.example.com
+${INGRESS} tuf.example.com
 EOF
 ```
 
@@ -81,7 +82,12 @@ sudo docker-mac-net-connect
 Using go-discover image
 
 ```bash
-cosign sign --fulcio-url http://fulcio.example.com --oidc-issuer http://keycloak.example.com/realms/sigstore --rekor-url http://rekor.example.com ttl.sh/go-discovery:1h --oidc-client-secret-file=client-secret.txt
+cosign sign --fulcio-url http://fulcio.example.com \
+--oidc-issuer http://keycloak.example.com/realms/sigstore \
+--rekor-url http://rekor.example.com \
+--oidc-client-secret-file=client-secret.txt \
+--allow-insecure-registry \
+ttl.sh/go-discovery:1h
 ```
 
 You should then be prompted with this below and redirected to keycloak for login via browser

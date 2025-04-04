@@ -1,10 +1,11 @@
 # image-signing-example
 
 ## Dependencies
-- docker
+- docker v4.38.0 (docker-mac-net-connect unsupported for > v3.38.0)
 - kubectl
 - crane
 - cosign
+- [docker-mac-net-connect](https://github.com/chipmk/docker-mac-net-connect)
 <!-- - syft -->
 
 ## Setup 
