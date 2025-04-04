@@ -6,7 +6,6 @@
 - crane
 - cosign
 - [docker-mac-net-connect](https://github.com/chipmk/docker-mac-net-connect)
-<!-- - syft -->
 
 ## Setup 
 
@@ -53,7 +52,7 @@ helm upgrade --install policy-controller -n cosign-system sigstore/policy-contro
 
 # Validating Signature Using Public Rekor
 
-Apply manifest below to validate signatures using the public Rekor and Fulcio endpoints for keyless signature validation
+First, something easy with a straight forward example using sigstore publicly exposed endpoints for rekor, fulcio etc. Apply manifest below to validate signatures using the public Rekor and Fulcio endpoints for keyless signature validation
 
 ```bash
 cat << EOF >> keyless-rekor-public.yaml
@@ -78,7 +77,11 @@ spec:
       ctlog:
         url: https://rekor.sigstore.dev
 EOF
+
+kubectl apply -f keyless-rekor-public.yaml
 ```
+
+Next deploy an image from the repo (glob) you specified and confirm that the pod is able to be deployed with proper image signature checks from the sigstore policy controller
 
 # Validating Image Signatures with Custom Key
 

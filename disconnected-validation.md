@@ -120,7 +120,54 @@ tlog entry created with index: 0
 Pushing signature to: ttl.sh/go-discovery
 ```
 
+## Validate Signature Locally 
+
+Next lets validate the signature locally using cosign to ensure the image has been properly signed
+
+```bash
+cosign verify \
+--certificate-oidc-issuer http://keycloak.example.com/realms/sigstore \
+--rekor-url http://rekor.example.com \
+--allow-insecure-registry \
+--certificate-identity-regexp=".*chainguard.dev" \
+ttl.sh/go-discovery:1h |jq
+```
+
+You should get a successful response below
+
+```json 
+[
+  {
+    "critical": {
+      "identity": {
+        "docker-reference": "ttl.sh/go-discovery"
+      },
+      "image": {
+        "docker-manifest-digest": "sha256:297f73324167b3e9feedfed1c7563788fdfaeea246ed4f5b46dfa757d131c80b"
+      },
+      "type": "cosign container image signature"
+    },
+    "optional": {
+      "1.3.6.1.4.1.57264.1.1": "http://keycloak.example.com/realms/sigstore",
+      "Bundle": {
+        "SignedEntryTimestamp": "MEQCIHiYDKA5BUR20U3geBZiqmSu327nPd4Ri6COBAdjhErkAiAISt+LRR9YHge0tjTqEWrOWDLw2DgO+Icy6nlEB3eRQg==",
+        "Payload": {
+          "body": "eyJhcGlWZXJzaW9uIjoiMC4wLjEiLCJraW5kIjoiaGFzaGVkcmVrb3JkIiwic3BlYyI6eyJkYXRhIjp7Imhhc2giOnsiYWxnb3JpdGhtIjoic2hhMjU2IiwidmFsdWUiOiJjZWU3Nzk1OWUwZDk4MjVhN2Y4MmVmNWIyMzIwMGIzNjI2MDk3Yzk2MWIyNTE4YTRiYmUxM2FmOWY5Y2ZjNjIwIn19LCJzaWduYXR1cmUiOnsiY29udGVudCI6Ik1FVUNJUUNGNHNUVVp1NEZCVnQ2a09jbzJaUUZRc3hUTkJ0akxGVE9XTVB3UlNCMHVRSWdIdXdod2xhWi9EZ1ZTM1k3SzB3RFpDd0FoWW4vQnExeEt1emcwNTNhdkhzPSIsInB1YmxpY0tleSI6eyJjb250ZW50IjoiTFMwdExTMUNSVWRKVGlCRFJWSlVTVVpKUTBGVVJTMHRMUzB0Q2sxSlNVUkdha05EUVhKMVowRjNTVUpCWjBsVlEyeHpNSGt4WXpFeFJDdGhRMFZEUmxsR056VTJhVVJDY1hGUmQwTm5XVWxMYjFwSmVtb3dSVUYzU1hjS1ptcEZUVTFCYjBkQk1WVkZRbWhOUkZaV1RrSk5VazEzUlZGWlJGWlJVVWxGZDNCRVdWZDRjRnB0T1hsaWJXeG9UVkpaZDBaQldVUldVVkZJUlhjeFZBcFpWelJuVW01S2FHSnRUbkJqTWs1MlRWSlpkMFpCV1VSV1VWRktSWGN3TVU1RVoyZFVWMFo1WVRKV01FbEdUakJOVVRSM1JFRlpSRlpSVVZKRmQxVXhDazU2U1ROT1JFVmFUVUpqUjBFeFZVVkRhRTFSVkVkc2RXUllaMmRTYlRreFltMVNhR1JIYkhaaWFrRmxSbmN3ZVU1VVFUQk5SRkY0VDFSVk1VMXFRbUVLUm5jd2VVNVVRVEJOUkZGNVRVUkJNVTFxUW1GTlFVRjNWMVJCVkVKblkzRm9hMnBQVUZGSlFrSm5aM0ZvYTJwUFVGRk5Ra0ozVGtOQlFWTlZZV2xOU0FveU9TODNRVUkxVEZoRU4xZDNVbXMzUkd0WU1GTkhWMVJXVlZsWFlYRnlORGxrYW05RFJtZEpialF4TTNkbUswNDRLMmQ1VEdnd1ZsTlBTblE1U1hkNUNqVlpiRlZZYW1aMFQwOVlZMUozY25Wdk5FbENhM3BEUTBGWk9IZEVaMWxFVmxJd1VFRlJTQzlDUVZGRVFXZGxRVTFDVFVkQk1WVmtTbEZSVFUxQmIwY0tRME56UjBGUlZVWkNkMDFFVFVJd1IwRXhWV1JFWjFGWFFrSlNRMnBFVlc0MlZtbzBjblZYWlVwdFRVTXdiRUo1UW0xb2EwZFVRV1pDWjA1V1NGTk5SUXBIUkVGWFowSlVjSGg0ZDBWVWRrZ3ZUVGxPV1VsWU1HNUtNV1V6Y2xSYWNYQjZRV2xDWjA1V1NGSkZRa0ZtT0VWSFJFRlhaMUpTTVdNeVZubE5WVUpxQ21GSFJuQmliV1F4V1ZoS2EweHRVbXhrYWtFMVFtZHZja0puUlVWQldVOHZUVUZGUWtKRGRHOWtTRkozVDJrNGRtRXlWalZaTW5oMldWZHpkVnBZYUdnS1lsaENjMXBUTldwaU1qQjJZMjFXYUdKSE1YcE1NMDV3V2pOT01HSXpTbXhOUkhOSFEybHpSMEZSVVVKbk56aDNRVkZuUlV4UmQzSmhTRkl3WTBSdmRncE1NblJzWlZkT2MySXlSbkpNYlZZMFdWY3hkMkpIVlhWWk1qbDBURE5LYkZsWGVIUmplVGw2WVZka2VtUkhPWGxhVkVOQ2FYZFpTMHQzV1VKQ1FVaFhDbVZSU1VWQloxSTVRa2h6UVdWUlFqTkJSbEpEV1dkMWQwWlpkRGxwYTFaTE9VVkphVm96TUZCSk0zVXlORmhKVFdZeWFXaDZibXhCTXl0aEswRkJRVUlLYkdkS1psSjZUVUZCUVZGRVFVVm5kMUpuU1doQlVIWkZWWEpUVldSSmNrRk1kUzlGVkhKa1NFVXdhekJ0V1ROcVlYbEdWbHBYVEdsRmRUbHJkWHBOVkFwQmFVVkJkMDlTT1RaUVdraEZLemhVTVdrM2JEWjFaRnBMUW05dWJuVTVTMUp4ZDJJeFUwdHhNa3RDUzJaa1FYZERaMWxKUzI5YVNYcHFNRVZCZDBsRUNsTlJRWGRTWjBsb1FVMXBLMVZrWm1GME5tUjBZVGRRZDJWd1lrVkNOR3gxUTFoWlJFRjNZVEphT1dSd1VVVnViSFl4TVZsQmFVVkJhRXg2UTBoWFVqSUtRWEoxTm5CSFJFaHBXR0o1YVc5ek5rbGhZVGRoY1hSRmQwMWtiMlJuVm1ObVdtczlDaTB0TFMwdFJVNUVJRU5GVWxSSlJrbERRVlJGTFMwdExTMEsifX19fQ==",
+          "integratedTime": 1743796525,
+          "logIndex": 0,
+          "logID": "6269c1234eedb64f03c7d339e13b7758177c87455273ed997783c119bc22ab9c"
+        }
+      },
+      "Issuer": "http://keycloak.example.com/realms/sigstore",
+      "Subject": "user1@chainguard.dev"
+    }
+  }
+]
+```
+
 ## Apply Cluster Image Policy custom resource
+
+Lastly lets apply a ClusterImagePolicy for our sigstore policy controller to validate signatures for images signed by our `.*@chainguard.dev` user identities 
 
 ```bash
 cat << EOF > custom-key-validation.yaml
