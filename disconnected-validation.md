@@ -120,6 +120,10 @@ tlog entry created with index: 0
 Pushing signature to: ttl.sh/go-discovery
 ```
 
+You will now be redirected in browser to keycloak login page. There are two users (user1 and user2) already setup in keycloak instance. Log in with either (password for both is `password`)
+
+![keycloak-image](./images/keycloak-login.png)
+
 ## Validate Signature Locally 
 
 Next lets validate the signature locally using cosign to ensure the image has been properly signed
