@@ -9,6 +9,18 @@ helm repo update
 
 ## Setup keycloak as OIDC provider
 
+Create a client secret 
+
+```bash
+export CLIENT_SECRET=this-is-my-secret
+envsubst < k8s/realm-cm-template > k8s/realm-cm.yaml
+
+# Create a client secret file to use later
+cat << EOF > oidc-client-secret.txt
+${CLIENT_SECRET}
+EOF
+```
+
 Deploy keycloak and import sigstore realm 
 
 ```bash

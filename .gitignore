@@ -4,3 +4,4 @@ cosign.key
 cosign.pub
 scripts/
 bak
+k8s/realm-cm.yaml
