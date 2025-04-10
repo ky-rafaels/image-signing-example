@@ -23,13 +23,6 @@ fulcio:
         },
         "CTLogURL": "http://rekor.example.com"
       }
-  # extraVolumes:
-  #   - name: fulcio-config
-  #     secret:
-  #       secretName: oidc-client-secret 
-  # extraVolumeMounts:
-  #   - name: fulcio-config
-  #     mountPath: /etc/fulcio-config
 rekor:
   server:
     # image:
@@ -61,4 +54,4 @@ tuf:
 copySecretJob:
   enabled: true
 tsa:
-  enabled: true
+  enabled: false
