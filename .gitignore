@@ -5,3 +5,4 @@ cosign.pub
 scripts/
 bak
 k8s/realm-cm.yaml
+*oidc-client-secret.txt
